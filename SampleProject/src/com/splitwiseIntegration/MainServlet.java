@@ -39,13 +39,11 @@ public class MainServlet extends HttpServlet {
 		        authUrl=OAuth.addQueryParameters(authUrl, OAuth.OAUTH_CONSUMER_KEY, CONSUMER_KEY,
 		                "application_name", APPLICATION_NAME);
 			if(req.getParameter("oauth_verifier")==null){
-				System.out.println("$$$$$$$In MainServlet Starts");
 				System.out.println("Fetching request token...");
 				resp.sendRedirect(authUrl);
 		        System.out.println("Request token: " + consumer.getToken());
 		        System.out.println("Token secret: " + consumer.getTokenSecret());
-		        System.out.println("$$$$$$$In MainServlet Ends");
-			}else{
+		   }else{
 				System.out.println("OAuth_Verifier"+req.getParameter("oauth_verifier"));
 				System.out.println("Request token: " + consumer.getToken());
 		        System.out.println("Token secret: " + consumer.getTokenSecret());
@@ -55,64 +53,8 @@ public class MainServlet extends HttpServlet {
 			}
 		}
 		catch(Exception e){
-			
 			System.out.println("*****In Exception"+e);
 			e.printStackTrace();
 		}
 	}
-	
-	/**
-	* 
-	* @param data
-	* The data to be signed.
-	* @param key
-	* The signing key.
-	* @return
-	* 
-	*/
-	public static String calculateHMAC(String data, String key)
-	{
-		String result=null;
-		try {
-
-			// get an hmac_sha1 key from the raw key bytes
-			SecretKeySpec signingKey = new SecretKeySpec(key.getBytes(),
-					HMAC_SHA1_ALGORITHM);
-
-			// get an hmac_sha1 Mac instance and initialize with the signing key
-			Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
-			mac.init(signingKey);
-
-			// compute the hmac on input data bytes
-			byte[] rawHmac = mac.doFinal(data.getBytes());
-			result= new String(rawHmac);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-	
-
-	  /**
-	   * Generates a random nonce
-	   * 
-	   * @return  A unique identifier for the request
-	   */
-	  private static String getNonce()
-	  {
-	    return RandomStringUtils.randomAlphanumeric(32);
-	  }
-	 
-	  /**
-	   * Generates an integer representing the number of seconds since the unix epoch using the
-	   * date/time the request is issued
-	   * 
-	   * @return  A timestamp for the request
-	   */
-	  private static String getTimestamp()
-	  {    
-	    return Long.toString((System.currentTimeMillis() / 1000));
-	  }
-	
 }
